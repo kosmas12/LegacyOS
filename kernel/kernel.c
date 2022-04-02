@@ -10,6 +10,7 @@
 int kernel_main() {
     GDTInstall();
     IDTInstall();
+    timerInstall();
     initKeyboard();
 
     VGAInit(VGA_COLOR_RED, VGA_COLOR_WHITE);
@@ -43,10 +44,6 @@ int kernel_main() {
            dateTimeData.hours,
            dateTimeData.minutes,
            dateTimeData.seconds);
-
-    int seconds = 0;
-
-    timerInstall();
 
     while (1);
 

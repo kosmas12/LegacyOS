@@ -60,8 +60,8 @@ void IDTInstall() {
     writePort(PIC2_DATA_PORT , 0);
     IOWait();
 
-    /* 0xFD is 11111101 - enables only IRQ1 (keyboard) */
-    writePort(PIC1_DATA_PORT , 0xFD);
+    /* 0xFC is 11111100 - enables only IRQ0 (PIT) IRQ1 (keyboard) */
+    writePort(PIC1_DATA_PORT , 0xFC);
     IOWait();
 
     /* Sets the special IDT pointer up, just like in 'gdt.c' */

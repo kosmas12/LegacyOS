@@ -47,5 +47,6 @@ enum RTCFormat getRTCFormat();
 RTCData readRTCData();
 unsigned char readCMOSReg(char registerAddress);
 inline int BCDToBinary(int number);
+void sleep(int seconds);
 
 #endif //LEGACYOS_CMOS_H

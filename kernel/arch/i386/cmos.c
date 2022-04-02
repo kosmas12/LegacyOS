@@ -104,3 +104,13 @@ unsigned char readCMOSReg(char registerAddress) {
     IOWait();
     return readPort(CMOS_OUTPUT_PORT);
 }
+
+void sleep(int seconds) {
+    RTCData data = readRTCData();
+
+    RTCData newData = readRTCData();
+    while (newData.seconds != data.seconds + seconds) {
+        newData = readRTCData();
+    }
+
+}
