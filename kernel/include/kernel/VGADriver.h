@@ -38,6 +38,7 @@ uint16_t *VGABuffer;
 uint8_t generateVGAColorEntry(enum VGAColor background, enum VGAColor foreground);
 void VGAPutCharacter(char character);
 void VGAWriteString(char *string);
+void VGAScroll();
 void VGAInit(enum VGAColor background, enum VGAColor foreground);
 
 

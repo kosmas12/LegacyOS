@@ -21,6 +21,9 @@ void VGAPutCharacter(char character) {
             return;
         }
     }
+    if (cursorY == VGA_HEIGHT) {
+        VGAScroll();
+    }
     VGABuffer[cursorY * VGA_WIDTH + cursorX++] = character | (currentlyUsedVGAColorEntry << 8);
 }
 
@@ -33,6 +36,18 @@ void VGAWriteString(char *string) {
 
 void VGAPutCharacterEntryAt(char character, uint8_t color, uint8_t x, uint8_t y) {
     VGABuffer[y * VGA_WIDTH + x] = character | (color << 8);
+}
+
+void VGAScroll() {
+    for (int y = 0; y < VGA_HEIGHT; ++y) {
+        for (int x = 0; x < VGA_WIDTH; ++x) {
+            VGABuffer[y * VGA_WIDTH + x] = VGABuffer[(y + 1) * VGA_WIDTH + x];
+        }
+    }
+    for (int i = 0; i < VGA_WIDTH; ++i) {
+        VGAPutCharacterEntryAt(' ', generateVGAColorEntry(VGA_COLOR_RED, VGA_COLOR_WHITE), i, VGA_HEIGHT - 1);
+    }
+    --cursorY;
 }
 
 void VGAInit(enum VGAColor background, enum VGAColor foreground) {
