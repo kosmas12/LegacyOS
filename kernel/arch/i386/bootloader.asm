@@ -22,7 +22,7 @@ stack_top:
 section .text
 
 global GDTFlush        ; Allows the C code to link to this
-extern pointerToGDT    ; Says that 'GDTPointer' is in another file
+extern pointerToGDT    ; Says that 'pointerToGDT' is in another file
 GDTFlush:
     lgdt [pointerToGDT]  ; Load the GDT from the address pointerToGDT points to
     mov ax, 0x10         ; Data Segment offset in the defined GDT
