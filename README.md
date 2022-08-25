@@ -31,7 +31,20 @@ it is most likely already turned on from the factory).
 - [ ] Storage/filesystem(s)
 - [ ] Make proper use of Multiboot
 - [ ] Shell
-- [ ] Memory management
+- [ ] Memory management 
+
+More soon...
+
+# Requirements and building
+
+LegacyOS uses shell scripts and makefiles to create its 
+bootable image. Specifically, all you need to do is
+run the `generateISO.sh` script to build the OS and
+create the image, and then optionally `qemu.sh` to run it 
+within the QEMU emulator. All you need for building is 
+`clang`,`make` and `nasm` for building, and `grub-mkrescue`
+along with its dependencies (notably `xorriso`) to create 
+the image.
 
 # License
 LegacyOS is licensed under the MIT license. This permits

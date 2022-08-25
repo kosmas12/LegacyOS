@@ -27,19 +27,13 @@ enum VGAColor {
     VGA_COLOR_WHITE = 0xF
 };
 
-uint8_t currentlyUsedVGAColorEntry;
-
-static size_t VGA_WIDTH;
-static size_t VGA_HEIGHT;
-size_t cursorX;
-size_t cursorY;
-uint16_t *VGABuffer;
-
 uint8_t generateVGAColorEntry(enum VGAColor background, enum VGAColor foreground);
 void VGAPutCharacter(char character);
 void VGAWriteString(char *string);
 void VGAScroll();
 void VGAInit(enum VGAColor background, enum VGAColor foreground);
+void changeCursorX(int places);
+void changeCursorY(int places);
 
 
 #endif //LEGACYOS_VGADRIVER_H

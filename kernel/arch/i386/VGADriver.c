@@ -7,6 +7,13 @@
 #include <stdint.h>
 #include <string.h>
 
+static size_t VGA_WIDTH;
+static size_t VGA_HEIGHT;
+size_t cursorX;
+size_t cursorY;
+uint16_t *VGABuffer;
+uint8_t currentlyUsedVGAColorEntry;
+
 #include "../../include/kernel/VGADriver.h"
 
 uint8_t generateVGAColorEntry(enum VGAColor background, enum VGAColor foreground) {
@@ -63,4 +70,12 @@ void VGAInit(enum VGAColor background, enum VGAColor foreground) {
             VGABuffer[i * VGA_WIDTH + j] = ' ' | (currentlyUsedVGAColorEntry << 8);
         }
     }
+}
+
+void changeCursorX(int places) {
+    cursorX += places;
+}
+
+void changeCursorY(int places) {
+    cursorY += places;
 }

@@ -5,8 +5,10 @@
 #include "../../include/kernel/idt.h"
 #include <string.h>
 
-void IDTSetGate(unsigned char num, unsigned long base, unsigned short selector, unsigned char flags) {
+struct IDTEntry idt[256];
+struct IDTPointer pointerToIDT;
 
+void IDTSetGate(unsigned char num, unsigned long base, unsigned short selector, unsigned char flags) {
     idt[num].baseLow = (base & 0xFFFF);
     idt[num].baseHigh = (base & 0xFFFF0000) >> 16;
     idt[num].always0 = 0;

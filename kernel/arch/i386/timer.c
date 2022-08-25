@@ -53,10 +53,10 @@ void wait(int ms) {
 
 extern void timerHandler();
 void timerInstall() {
-    timerInit(1000);
-
     unsigned long timerHandlerAddress = (unsigned long) timerHandler;
 
     IDTSetGate(0x20, timerHandlerAddress, 0x09, 0x8E);
     IDTUpdate();
+
+    timerInit(1000);
 }

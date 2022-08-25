@@ -21,10 +21,6 @@ struct GDTPointer {
     unsigned int base;
 } __attribute__((packed));
 
-/* Our GDT, with 3 entries, and finally our special GDT pointer */
-struct GDTEntry GDT[3];
-struct GDTPointer pointerToGDT;
-
 /* This will be a function in start.asm. We use this to properly
 *  reload the new segment registers */
 extern void GDTFlush();

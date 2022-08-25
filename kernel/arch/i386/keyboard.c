@@ -85,9 +85,9 @@ void keyboardHandlerMain() {
                 capsLockEnabled = !capsLockEnabled;
                 return;
             case 0x0E:
-                --cursorX;
+                changeCursorX(-1);
                 putchar(' ');
-                --cursorX;
+                changeCursorX(-1);
                 return;
             default:
                 if (capsLockEnabled) {

@@ -35,10 +35,6 @@ struct IDTPointer {
     unsigned int base;
 } __attribute__((packed));
 
-struct IDTEntry idt[256];
-struct IDTPointer pointerToIDT;
-
-
 void IDTSetGate(unsigned char num, unsigned long base, unsigned short selector, unsigned char flags);
 /* This exists in 'start.asm', and is used to load our IDT */
 extern void IDTLoad();
