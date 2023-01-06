@@ -21,17 +21,29 @@ extern void writePort(unsigned short port, unsigned char data);
 #define RTC_STATUS_A_REGISTER 0x0A
 #define RTC_STATUS_B_REGISTER 0x0B
 
+// Enum used to make code that deals with RTC formats more readable
 enum RTCFormat {
-    // 12-hour binary format
-    RTC_FORMAT_BINARY_12,
-    // 24-hour binary format
-    RTC_FORMAT_BINARY_24,
     // 12-hour BCD format
-    RTC_FORMAT_BCD_12,
+    RTC_FORMAT_BCD_12 = 0,
     // 24-hour BCD format
-    RTC_FORMAT_BCD_24
+    RTC_FORMAT_BCD_24 = 1,
+    // 12-hour binary format
+    RTC_FORMAT_BINARY_12 = 2,
+    // 24-hour binary format
+    RTC_FORMAT_BINARY_24 = 3
 };
 
+/* Special data structure to hold data that is meant to be sent/received to/from the computer's Real Time Clock.
+   This structure can hold:
+      * The century
+      * The year
+      * The month
+      * The day of the month
+      * The hours
+      * The minutes
+      * The seconds
+      * The numerical format used in the data (BCD or binary, 12-hour or 24-hour)
+*/
 typedef struct {
     int century;
     int year;
@@ -43,10 +55,19 @@ typedef struct {
     enum RTCFormat format;
 }RTCData;
 
+// Gets the format that the computer's Real Time Clock uses to store the itme
 enum RTCFormat getRTCFormat();
+
+// Reads the data from the computer's Real Time Clock
 RTCData readRTCData();
+
+// Reads the specified CMOS register
 unsigned char readCMOSReg(char registerAddress);
+
+// Fast function to convert BCD number to binary
 inline int BCDToBinary(int number);
-void sleep(int seconds);
+
+// Waits `seconds` using the computer's Real Time Clock for timekeeping
+void wait(int seconds);
 
 #endif //LEGACYOS_CMOS_H

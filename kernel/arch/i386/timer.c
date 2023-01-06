@@ -46,7 +46,7 @@ void increment1ms() {
     ++passedTicks;
 }
 
-void wait(int ms) {
+void sleep(int ms) {
     int currentPassedTicks = passedTicks;
     while (passedTicks < currentPassedTicks + ms);
 }

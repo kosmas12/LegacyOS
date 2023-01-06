@@ -21,7 +21,15 @@
 #define ICW4_BUF_MASTER	0x0C		/* Buffered mode/master */
 #define ICW4_SFNM	0x10		/* Special fully nested (not) */
 
-/* Defines an IDT entry */
+/* Special data structure to hold an Interrupt Descriptor entry for the Interrupt Descriptor Table.
+   This structure MUST hold:
+      * The Interrupt Service Routine's base address
+      * A Segment Selector which points to a code segment in the Global Descriptor Table
+      * The Gate Type, which defines what the Descriptor is supposed to serve
+      * The privilege level needed to run the interrupt
+
+   This structure NEEDS to be packed
+*/
 struct IDTEntry {
     unsigned short baseLow;
     unsigned short selector;   /* Our kernel segment goes here! */
@@ -30,15 +38,29 @@ struct IDTEntry {
     unsigned short baseHigh;
 } __attribute__((packed));
 
+
+/* Special data structure to hold a pointer to an Interrupt Descriptor Table.
+   This structure MUST hold:
+      * The Interrupt Descriptor Table's size, decremented by 1
+      * The Interrupt Descriptor Table's base address in the computer's memory
+
+   This structure NEEDS to be packed
+*/
 struct IDTPointer {
     unsigned short limit;
     unsigned int base;
 } __attribute__((packed));
 
+// Creates an Interrupt Descriptor entry
 void IDTSetGate(unsigned char num, unsigned long base, unsigned short selector, unsigned char flags);
-/* This exists in 'start.asm', and is used to load our IDT */
+
+// Loads the Interrupt Descriptor Table to the processor
 extern void IDTLoad();
+
+// Updates the processor's Interrupt Descriptor Table. Really just calls `IDTLoad()`
 void IDTUpdate();
+
+// Creates the initial Interrupt Descriptor Table and loads it to the processor
 void IDTInstall();
 
 #endif //LEGACYOS_IDT_H

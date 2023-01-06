@@ -8,7 +8,6 @@
 struct GDTEntry GDT[3];
 struct GDTPointer pointerToGDT;
 
-/* Setup a descriptor in the Global Descriptor Table */
 void GDTSetGate(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char granularity) {
     /* Setup the descriptor base address */
     GDT[num].baseLow = (base & 0xFFFF);
@@ -24,11 +23,6 @@ void GDTSetGate(int num, unsigned long base, unsigned long limit, unsigned char 
     GDT[num].access = access;
 }
 
-/* Should be called by main. This will setup the special GDT
-*  pointer, set up the first 3 entries in our GDT, and then
-*  finally call GDTFlush() in our assembler file in order
-*  to tell the processor where the new GDT is and update the
-*  new segment registers */
 void GDTInstall() {
     /* Setup the GDT pointer and limit */
     pointerToGDT.limit = (sizeof(struct GDTEntry) * 3) - 1;

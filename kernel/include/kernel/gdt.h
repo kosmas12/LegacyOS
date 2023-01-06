@@ -5,6 +5,15 @@
 #ifndef LEGACYOS_GDT_H
 #define LEGACYOS_GDT_H
 
+/* Special data structure to hold a segment entry for the Global Descriptor Table.
+   This structure MUST hold:
+      * The segment's base address in the computer's memory
+      * The size of the segment
+      * The access byte for the segment
+      * The flags for the segment
+
+   This structure NEEDS to be packed
+*/
 struct GDTEntry {
     unsigned short limitLow;
     unsigned short baseLow;
@@ -14,17 +23,22 @@ struct GDTEntry {
     unsigned char baseHigh;
 } __attribute__((packed));
 
-/* Special pointer which includes the limit: The max bytes
-*  taken up by the GDT, minus 1. Again, this NEEDS to be packed */
+/* Special data structure to hold a pointer to a Global Descriptor Table.
+   This structure MUST hold:
+      * The Global Descriptor Table's size, decremented by 1
+      * The Global Descriptor Table's base address in the computer's memory
+
+   This structure NEEDS to be packed
+*/
 struct GDTPointer {
     unsigned short limit;
     unsigned int base;
 } __attribute__((packed));
 
-/* This will be a function in start.asm. We use this to properly
-*  reload the new segment registers */
+// Updates the processor to store the new Global Descriptor Table
 extern void GDTFlush();
 
+// Installs our operating system's GDT to the processor
 void GDTInstall();
 
 #endif //LEGACYOS_GDT_H

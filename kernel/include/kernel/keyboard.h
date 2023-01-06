@@ -7,6 +7,7 @@
 
 #include "idt.h"
 
+// Initializes the keyboard (PIC masking, appropriate IDT entry, etc.)
 void initKeyboard();
 
 #endif //LEGACYOS_KEYBOARD_H

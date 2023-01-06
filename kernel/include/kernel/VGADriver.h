@@ -27,12 +27,25 @@ enum VGAColor {
     VGA_COLOR_WHITE = 0xF
 };
 
+// Generates a VGA color entry byte from the given background and foreground colors
 uint8_t generateVGAColorEntry(enum VGAColor background, enum VGAColor foreground);
+
+// Puts a character to the VGA buffer
 void VGAPutCharacter(char character);
+
+// Writes a whole NULL-terminated string to the VGA buffer
 void VGAWriteString(char *string);
+
+// Scrolls the VGA buffer
 void VGAScroll();
+
+// Initializes VGA text mode
 void VGAInit(enum VGAColor background, enum VGAColor foreground);
+
+// Change the X position of the text cursor by `places`
 void changeCursorX(int places);
+
+// Change the Y position of the text cursor by `places`
 void changeCursorY(int places);
 
 

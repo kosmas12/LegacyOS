@@ -7,40 +7,33 @@
 
 extern void IOWait();
 
-// Get the format the RTC uses for its data
 enum RTCFormat getRTCFormat() {
     // RTC Date/Time bytes format.
     // Default is 12-hour BCD (RTC_FORMAT_BCD_12)
     enum RTCFormat format = RTC_FORMAT_BCD_12;
 
-    char statusBRegister = readCMOSReg(RTC_STATUS_B_REGISTER);
+    unsigned char statusBRegister = readCMOSReg(RTC_STATUS_B_REGISTER);
 
     // If bit 1 is set (0x2), the clock uses the 24-hour format (instead of the 12-hour format).
-    int uses24HourFormat = statusBRegister & 0x2;
+    int uses24HourFormat = (statusBRegister & 0x2) >> 1;
     // If bit 2 is set (0x4), the clock uses the binary format (instead of the BCD format).
-    int usesBinaryFormat = statusBRegister & 0x4;
+    int usesBinaryFormat = (statusBRegister & 0x4) >> 1;
 
-    if (usesBinaryFormat) {
-        format = RTC_FORMAT_BINARY_12;
-        if(uses24HourFormat) {
-            format = RTC_FORMAT_BINARY_24;
-        }
-    }
-    else {
-        if (uses24HourFormat) {
-            // Remember, if we are here this means we are using BCD instead of binary
-            format = RTC_FORMAT_BCD_24;
-        }
-    }
+    /* This takes advantage of C's handling of enums as integers.
+       With the bitshifts, uses24HourFormat will either be 1 or 0
+       Similarly, usesBinaryFormat will either be 2 or 0
+       The enum is laid out such that simple addition will give us the correct value.
+    */
+    format += uses24HourFormat + usesBinaryFormat;
 
     return format;
 }
 
-// Quick BCD -> Binary conversion function
 inline int BCDToBinary(int number) {
     return ((number & 0xF0) >> 1) + ( (number & 0xF0) >> 3) + (number & 0xf);
 }
 
+// Checks if the computer's Real Time Clock is currently updating
 inline int checkRTCUpdateFlag() {
     // If updating, the highest bit of Status A will be set (0x80)
     return readCMOSReg(RTC_STATUS_A_REGISTER) & 0x80;
@@ -105,7 +98,7 @@ unsigned char readCMOSReg(char registerAddress) {
     return readPort(CMOS_OUTPUT_PORT);
 }
 
-void sleep(int seconds) {
+void wait(int seconds) {
     RTCData data = readRTCData();
 
     RTCData newData = readRTCData();

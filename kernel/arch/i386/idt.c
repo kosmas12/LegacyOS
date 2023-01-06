@@ -25,7 +25,7 @@ void IDTUpdate() {
 extern unsigned char readPort(unsigned short port);
 extern void writePort(unsigned short port, unsigned char data);
 extern void IOWait();
-/* Installs the IDT */
+
 void IDTInstall() {
 
     /* ICW1 - begin initialization */
