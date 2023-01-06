@@ -43,7 +43,7 @@ run the `generateISO.sh` script to build the OS and
 create the image, and then optionally `qemu.sh` to run it 
 within the QEMU emulator. All you need is `clang`,`make`
 and `nasm` for building, and `grub-mkrescue` along with 
-its dependencies (notably `xorriso`) to create the image.
+its dependencies (notably `xorriso` and GNU mtools) to create the image.
 
 # License
 LegacyOS is licensed under the MIT license. This permits
