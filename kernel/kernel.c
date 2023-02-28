@@ -10,10 +10,10 @@
 int kernel_main() {
     GDTInstall();
     IDTInstall();
-    timerInstall();
-    initKeyboard();
-
     VGAInit(VGA_COLOR_RED, VGA_COLOR_WHITE);
+    initKeyboard();
+    timerInstall();
+
     printf("Welcome to LegacyOS!\n\n");
 
     RTCData dateTimeData = readRTCData();

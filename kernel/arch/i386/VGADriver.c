@@ -2,10 +2,8 @@
 // Created by kosmas on 21/2/22.
 //
 
-#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <string.h>
 
 static size_t VGA_WIDTH;
 static size_t VGA_HEIGHT;
