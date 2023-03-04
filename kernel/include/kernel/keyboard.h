@@ -9,5 +9,6 @@
 
 // Initializes the keyboard (PIC masking, appropriate IDT entry, etc.)
 void initKeyboard();
+char popChar();
 
 #endif //LEGACYOS_KEYBOARD_H

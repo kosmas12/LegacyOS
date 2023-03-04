@@ -45,7 +45,10 @@ int kernel_main() {
            dateTimeData.minutes,
            dateTimeData.seconds);
 
-    while (1);
+    while (1) {
+        char character = getchar();
+        printf("%c", character);
+    }
 
     return 0;
 }

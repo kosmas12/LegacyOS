@@ -5,10 +5,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
-static size_t VGA_WIDTH;
-static size_t VGA_HEIGHT;
-size_t cursorX;
-size_t cursorY;
+static uint8_t VGA_WIDTH;
+static uint8_t VGA_HEIGHT;
+uint8_t cursorX;
+uint8_t cursorY;
 uint16_t *VGABuffer;
 uint8_t currentlyUsedVGAColorEntry;
 
@@ -18,18 +18,53 @@ uint8_t generateVGAColorEntry(enum VGAColor background, enum VGAColor foreground
     return (background << 4) | foreground;
 }
 
+extern unsigned char readPort(unsigned short port);
+extern void writePort(unsigned short port, unsigned char data);
+
+inline void setCursorPosition(int x, int y) {
+    uint16_t position = y * VGA_WIDTH + x;
+
+    writePort(CURSOR_COMMAND_PORT, CURSOR_SET_LOW_BYTE);
+    writePort(CURSOR_DATA_PORT, position & 0xFF);
+    writePort(CURSOR_COMMAND_PORT, CURSOR_SET_HIGH_BYTE);
+    writePort(CURSOR_DATA_PORT, (position & 0xFF00) >> 8);
+}
+
 void VGAPutCharacter(char character) {
     if (cursorX == VGA_WIDTH || character == '\n') {
         cursorX = 0;
         cursorY++;
+        if (cursorY == VGA_HEIGHT) {
+            VGAScroll();
+            --cursorY;
+            setCursorPosition(cursorX, cursorY);
+        }
+        setCursorPosition(cursorX, cursorY);
         if (character == '\n') {
             return;
         }
     }
+    if (character == '\b') {
+        if (cursorX > 0) {
+            cursorX--;
+        }
+        else {
+            if (cursorY > 0) {
+                --cursorY;
+                cursorX = VGA_WIDTH - 1;
+            }
+        }
+        VGABuffer[cursorY * VGA_WIDTH + cursorX] = ' ' | (currentlyUsedVGAColorEntry << 8);
+        setCursorPosition(cursorX, cursorY);
+        return;
+    }
     if (cursorY == VGA_HEIGHT) {
         VGAScroll();
+        --cursorY;
+        setCursorPosition(cursorX, cursorY);
     }
     VGABuffer[cursorY * VGA_WIDTH + cursorX++] = character | (currentlyUsedVGAColorEntry << 8);
+    setCursorPosition(cursorX, cursorY);
 }
 
 void VGAWriteString(char *string) {
@@ -52,7 +87,6 @@ void VGAScroll() {
     for (int i = 0; i < VGA_WIDTH; ++i) {
         VGAPutCharacterEntryAt(' ', generateVGAColorEntry(VGA_COLOR_RED, VGA_COLOR_WHITE), i, VGA_HEIGHT - 1);
     }
-    --cursorY;
 }
 
 void VGAInit(enum VGAColor background, enum VGAColor foreground) {

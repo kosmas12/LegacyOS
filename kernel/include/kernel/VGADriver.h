@@ -8,6 +8,13 @@
 #include <stdint.h>
 #include <stddef.h>
 
+// RESEARCHME: Are these the actual names?
+#define CURSOR_COMMAND_PORT 0x3D4
+#define CURSOR_DATA_PORT 0x3D5
+
+#define CURSOR_SET_LOW_BYTE 0xF
+#define CURSOR_SET_HIGH_BYTE 0xE
+
 enum VGAColor {
     VGA_COLOR_BLACK = 0x0,
     VGA_COLOR_BLUE = 0x1,
@@ -29,6 +36,8 @@ enum VGAColor {
 
 // Generates a VGA color entry byte from the given background and foreground colors
 uint8_t generateVGAColorEntry(enum VGAColor background, enum VGAColor foreground);
+
+inline void setCursorPosition(int x, int y);
 
 // Puts a character to the VGA buffer
 void VGAPutCharacter(char character);

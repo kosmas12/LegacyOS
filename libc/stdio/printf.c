@@ -94,6 +94,11 @@ int printf(const char *restrict format, ...) {
                 tempInteger /= 10;
             }
 
+            if (integer == 0) {
+                putchar('0');
+                written++;
+            }
+
             while (numDigits > 0) {
                 int powerOf10 = 1;
                 for (int i = 1; i < numDigits; ++i) {

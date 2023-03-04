@@ -39,6 +39,20 @@ extern unsigned char readPort(unsigned short port);
 extern void writePort(unsigned short port, unsigned char data);
 extern void keyboardHandler();
 
+char buffer[256];
+volatile uint8_t bufferFilled = 0;
+
+char popChar() {
+    // This loop will stop when the keyboard interrupt is triggered or if there already is data
+    while (bufferFilled == 0);
+    bufferFilled--;
+    return buffer[0];
+}
+
+void pushChar(char character) {
+    buffer[bufferFilled++] = character;
+}
+
 char keyboardMap[128] = {
    0, 27, '1', '2', '3', '4', '5', '6', '7', '8',    /* 9 */
    '9', '0', '-', '=', '\b',    /* Backspace */
@@ -278,16 +292,14 @@ void keyboardHandlerMain() {
                 capsLockEnabled = !capsLockEnabled;
                 return;
             case 0x0E:
-                changeCursorX(-1);
-                putchar(' ');
-                changeCursorX(-1);
+                pushChar('\b');
                 return;
             default:
-                if (capsLockEnabled) {
-                    putchar(keyboardMap[keycode] - 32);
+                if (capsLockEnabled && (keyboardMap[keycode] - 32 >= 'A' && keyboardMap[keycode] - 32 <= 'Z')) {
+                    pushChar(keyboardMap[keycode] - 32);
                 }
                 else {
-                    putchar(keyboardMap[keycode]);
+                    pushChar(keyboardMap[keycode]);
                 }
         }
     }
