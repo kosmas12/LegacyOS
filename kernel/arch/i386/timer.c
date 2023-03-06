@@ -22,6 +22,7 @@ inline unsigned char makePITCommand(int channel, int accessMode, int operationMo
 }
 
 void timerInit(int hz) {
+    __asm__("cli");
     int divisor = PIT_INPUT_CLOCK_HZ/hz;
 
     unsigned char command = makePITCommand(0, 3, 2, 0);
@@ -29,14 +30,16 @@ void timerInit(int hz) {
     writePort(PIT_COMMAND_REGISTER, command);
     writePort(PIT_DATA_REGISTER_0, divisor & 0xFF);
     writePort(PIT_DATA_REGISTER_0, divisor >> 8);
-
+    __asm__("sti");
 }
 
 void timerSetReloadValue(int hz) {
+    __asm__("cli");
     int divisor = PIT_INPUT_CLOCK_HZ/hz;
 
     writePort(PIT_DATA_REGISTER_0, divisor & 0xFF);
     writePort(PIT_DATA_REGISTER_0, divisor >> 8);
+    __asm__("sti");
 }
 
 extern void IOWait();
@@ -47,7 +50,7 @@ void increment1ms() {
 }
 
 void sleep(int ms) {
-    int currentPassedTicks = passedTicks;
+    volatile int currentPassedTicks = passedTicks;
     while (passedTicks < currentPassedTicks + ms);
 }
 

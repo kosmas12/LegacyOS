@@ -8,8 +8,8 @@ extern void writePort(unsigned short port, unsigned char data);
 #ifndef LEGACYOS_CMOS_H
 #define LEGACYOS_CMOS_H
 
-#define CMOS_INPUT_PORT 0x70
-#define CMOS_OUTPUT_PORT 0x71
+#define CMOS_REGISTER_PORT 0x70
+#define CMOS_DATA_PORT 0x71
 
 #define RTC_SECONDS_REGISTER 0x00
 #define RTC_MINUTES_REGISTER 0x02
@@ -45,13 +45,13 @@ enum RTCFormat {
       * The numerical format used in the data (BCD or binary, 12-hour or 24-hour)
 */
 typedef struct {
-    int century;
-    int year;
-    int month;
-    int dayOfMonth;
-    int hours;
-    int minutes;
-    int seconds;
+    unsigned char century;
+    unsigned char year;
+    unsigned char month;
+    unsigned char dayOfMonth;
+    unsigned char hours;
+    unsigned char minutes;
+    unsigned char seconds;
     enum RTCFormat format;
 }RTCData;
 
@@ -61,6 +61,8 @@ enum RTCFormat getRTCFormat();
 // Reads the data from the computer's Real Time Clock
 RTCData readRTCData();
 
+void writeRTCData(RTCData data);
+
 // Reads the specified CMOS register
 unsigned char readCMOSReg(char registerAddress);
 
@@ -68,6 +70,6 @@ unsigned char readCMOSReg(char registerAddress);
 inline int BCDToBinary(int number);
 
 // Waits `seconds` using the computer's Real Time Clock for timekeeping
-void wait(int seconds);
+void sleepSeconds(int seconds);
 
 #endif //LEGACYOS_CMOS_H

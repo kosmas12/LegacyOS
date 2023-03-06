@@ -33,6 +33,10 @@ inline int BCDToBinary(int number) {
     return ((number & 0xF0) >> 1) + ( (number & 0xF0) >> 3) + (number & 0xf);
 }
 
+inline int binaryToBCD(int number) {
+    return(((number / 10) << 4) | (number % 10));
+}
+
 // Checks if the computer's Real Time Clock is currently updating
 inline int checkRTCUpdateFlag() {
     // If updating, the highest bit of Status A will be set (0x80)
@@ -91,14 +95,55 @@ RTCData readRTCData() {
     return data;
 }
 
-unsigned char readCMOSReg(char registerAddress) {
+void writeCMOSReg(char registerAddress, unsigned char data) {
+    __asm__("cli");
     int disableNMIBit = 1;
-    writePort(CMOS_INPUT_PORT, ((disableNMIBit) << 7) | registerAddress);
+    writePort(CMOS_REGISTER_PORT, ((disableNMIBit) << 7) | registerAddress);
     IOWait();
-    return readPort(CMOS_OUTPUT_PORT);
+    writePort(CMOS_DATA_PORT, data);
+    __asm__("sti");
 }
 
-void wait(int seconds) {
+void writeRTCData(RTCData data) {
+    enum RTCFormat actualFormat = getRTCFormat();
+
+    if ((actualFormat == RTC_FORMAT_BCD_12 || actualFormat == RTC_FORMAT_BINARY_12)
+    && (data.format == RTC_FORMAT_BCD_24 || data.format == RTC_FORMAT_BINARY_24)) {
+        if (data.hours > 12) {
+            data.hours -= 12;
+            data.hours |= 0x80;
+        }
+    }
+
+    if ((actualFormat == RTC_FORMAT_BCD_12 || actualFormat == RTC_FORMAT_BCD_24)
+    && (data.format == RTC_FORMAT_BINARY_12 || data.format == RTC_FORMAT_BINARY_24)) {
+        data.year = binaryToBCD(data.year);
+        data.month = binaryToBCD(data.month);
+        data.dayOfMonth = binaryToBCD(data.dayOfMonth);
+        data.hours = binaryToBCD(data.hours);
+        data.minutes = binaryToBCD(data.minutes);
+        data.seconds = binaryToBCD(data.seconds);
+    }
+
+    writeCMOSReg(RTC_YEAR_REGISTER, data.year);
+    writeCMOSReg(RTC_MONTH_REGISTER, data.month);
+    writeCMOSReg(RTC_DAYOFMONTH_REGISTER, data.dayOfMonth);
+    writeCMOSReg(RTC_HOURS_REGISTER, data.hours);
+    writeCMOSReg(RTC_MINUTES_REGISTER, data.minutes);
+    writeCMOSReg(RTC_SECONDS_REGISTER, data.seconds);
+
+}
+
+unsigned char readCMOSReg(char registerAddress) {
+    int disableNMIBit = 1;
+    writePort(CMOS_REGISTER_PORT, ((disableNMIBit) << 7) | registerAddress);
+    IOWait();
+    return readPort(CMOS_DATA_PORT);
+}
+
+// NOTE: This works, but was just quickly hacked together as a primitive sleep() function.
+// Use `void sleep(int ms)` from timer.h instead
+void sleepSeconds(int seconds) {
     RTCData data = readRTCData();
 
     RTCData newData = readRTCData();

@@ -42,6 +42,8 @@ inline void setCursorPosition(int x, int y);
 // Puts a character to the VGA buffer
 void VGAPutCharacter(char character);
 
+void VGAClearScreen();
+
 // Writes a whole NULL-terminated string to the VGA buffer
 void VGAWriteString(char *string);
 

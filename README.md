@@ -27,10 +27,10 @@ it is most likely already turned on from the factory).
 - [x] Video driver
 - [x] PS/2 keyboard support
 - [x] RTC reading
-- [ ] RTC writing
+- [X] RTC writing
 - [ ] Storage/filesystem(s)
 - [ ] Make proper use of Multiboot
-- [ ] Shell
+- [X] Shell (in progress)
 - [ ] Memory management 
 
 More soon...

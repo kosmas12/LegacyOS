@@ -89,6 +89,16 @@ void VGAScroll() {
     }
 }
 
+void VGAClearScreen() {
+    for (size_t i = 0; i < VGA_HEIGHT; ++i) {
+        for (size_t j = 0; j < VGA_WIDTH; ++j) {
+            VGABuffer[i * VGA_WIDTH + j] = ' ' | (currentlyUsedVGAColorEntry << 8);
+        }
+    }
+    cursorY = 0;
+    cursorX = 0;
+}
+
 void VGAInit(enum VGAColor background, enum VGAColor foreground) {
     VGA_WIDTH = 80;
     VGA_HEIGHT = 25;
@@ -97,11 +107,7 @@ void VGAInit(enum VGAColor background, enum VGAColor foreground) {
     VGABuffer = (uint16_t *) 0xB8000;
     currentlyUsedVGAColorEntry = generateVGAColorEntry(background, foreground);
 
-    for (size_t i = 0; i < VGA_HEIGHT; ++i) {
-        for (size_t j = 0; j < VGA_WIDTH; ++j) {
-            VGABuffer[i * VGA_WIDTH + j] = ' ' | (currentlyUsedVGAColorEntry << 8);
-        }
-    }
+    VGAClearScreen();
 }
 
 void changeCursorX(int places) {
