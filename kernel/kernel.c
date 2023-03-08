@@ -25,10 +25,12 @@ int getNumericalInput(int digits) {
         multipleOf10 *= 10;
     }
 
+    int lastThingAdded = 0;
     while (character != '\n') {
         if (character >= '0' && character <= '9') {
             putchar(character);
-            input += (character - '0') * multipleOf10;
+            lastThingAdded = (character - '0') * multipleOf10;
+            input += lastThingAdded;
             multipleOf10 /= 10;
         }
         character = getchar();
@@ -147,6 +149,9 @@ int kernel_main() {
         printf("%c", character);
         if (character != '\b') {
             shellCommand[index++] = character;
+        }
+        else {
+            shellCommand[index--] = '\0';
         }
         if (character == '\n') {
             shellCommand[index - 1] = '\0';
