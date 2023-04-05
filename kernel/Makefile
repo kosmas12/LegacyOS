@@ -29,6 +29,11 @@ LIBS:=$(LIBS) $(KERNEL_ARCH_LIBS)
  
 KERNEL_OBJS=\
 kernel.o \
+shell/shell.o \
+shell/shellcommands/clearscreen.o \
+shell/shellcommands/readrtc.o \
+shell/shellcommands/writertc.o \
+shell/shellcommands/printhelp.o \
 $(KERNEL_ARCH_OBJS)
 
 OBJS=\
