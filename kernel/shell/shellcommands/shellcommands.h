@@ -9,5 +9,6 @@ void writeRTC();
 void readRTC();
 void clearScreen();
 void printHelp();
+void floppyList();
 
 #endif //LEGACYOS_SHELLCOMMANDS_H

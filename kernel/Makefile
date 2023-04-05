@@ -34,6 +34,7 @@ shell/shellcommands/clearscreen.o \
 shell/shellcommands/readrtc.o \
 shell/shellcommands/writertc.o \
 shell/shellcommands/printhelp.o \
+shell/shellcommands/floppylist.o \
 $(KERNEL_ARCH_OBJS)
 
 OBJS=\

@@ -134,8 +134,28 @@ void writeRTCData(RTCData data) {
 
 }
 
+FloppyInfo getFloppyInfo() {
+    FloppyInfo info;
+    info.numDrives = 0;
+
+    unsigned char floppyTypesRegister = readCMOSReg(FLOPPY_TYPES_REGISTER);
+    // Drive 0 is the master drive, drive 1 is the slave
+    info.types[0] = (floppyTypesRegister & 0xF0) >> 4;
+    info.types[1] = floppyTypesRegister & 0xF;
+
+    if (info.types[0] != NO_DRIVE) {
+        ++info.numDrives;
+    }
+
+    if (info.types[1] != NO_DRIVE) {
+        ++info.numDrives;
+    }
+
+    return info;
+}
+
 unsigned char readCMOSReg(char registerAddress) {
-    int disableNMIBit = 1;
+    unsigned char disableNMIBit = 1;
     writePort(CMOS_REGISTER_PORT, ((disableNMIBit) << 7) | registerAddress);
     IOWait();
     return readPort(CMOS_DATA_PORT);

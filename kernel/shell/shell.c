@@ -52,6 +52,9 @@ void processShellCommand(char command[256], int *index) {
     else if (strcmp(command, "help") == 0) {
         printHelp();
     }
+    else if (strcmp(command, "floppylist") == 0) {
+        floppyList();
+    }
     else {
         printf("Command %s not found\n", command);
     }

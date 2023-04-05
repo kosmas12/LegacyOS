@@ -21,6 +21,8 @@ extern void writePort(unsigned short port, unsigned char data);
 #define RTC_STATUS_A_REGISTER 0x0A
 #define RTC_STATUS_B_REGISTER 0x0B
 
+#define FLOPPY_TYPES_REGISTER 0x10
+
 // Enum used to make code that deals with RTC formats more readable
 enum RTCFormat {
     // 12-hour BCD format
@@ -31,6 +33,16 @@ enum RTCFormat {
     RTC_FORMAT_BINARY_12 = 2,
     // 24-hour binary format
     RTC_FORMAT_BINARY_24 = 3
+};
+
+// Enum used to make code that deals with floppy media more readable
+enum FloppyType {
+    NO_DRIVE = 0,
+    FIVE_360KB = 1,
+    FIVE_1200KB = 2,
+    THREE_720KB = 3,
+    THREE_1440KB = 4,
+    THREE_2880KB = 5
 };
 
 /* Special data structure to hold data that is meant to be sent/received to/from the computer's Real Time Clock.
@@ -55,13 +67,29 @@ typedef struct {
     enum RTCFormat format;
 }RTCData;
 
-// Gets the format that the computer's Real Time Clock uses to store the itme
+/* Special data structure to hold info about the media that is supported the system's floppy drives.
+   This structure can hold:
+      * The number of drives
+      * The type of media for all 6 drives a system usually can have
+   NOTE: While systems can have up to 3 controllers, CMOS memory only has info for the first one.
+   This means that, until further research, only the media types of the first 2 drives are guaranteed to be valid
+*/
+typedef struct {
+    unsigned char numDrives;
+    enum FloppyType types[6];
+}FloppyInfo;
+
+// Gets the format that the computer's Real Time Clock uses to store the time
 enum RTCFormat getRTCFormat();
 
 // Reads the data from the computer's Real Time Clock
 RTCData readRTCData();
 
+// Write data to the computer's Real Time Clock
 void writeRTCData(RTCData data);
+
+// Get info about the media support for the connected floppy drives
+FloppyInfo getFloppyInfo();
 
 // Reads the specified CMOS register
 unsigned char readCMOSReg(char registerAddress);

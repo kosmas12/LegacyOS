@@ -6,8 +6,9 @@
 #include <stdio.h>
 
 void printHelp() {
-    printf("writertc - Configure the time in the Real Time Clock\n");
-    printf("readrtc - Read the Real Time Clock's configured time\n");
     printf("clear - Clear the screen\n");
+    printf("floppylist - List all floppy drives and what media they support/have inserted\n");
+    printf("readrtc - Read the Real Time Clock's configured time\n");
+    printf("writertc - Configure the time in the Real Time Clock\n");
     printf("help - Print this help prompt\n");
 }
