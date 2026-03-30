@@ -48,7 +48,7 @@ struct IDTEntry {
 */
 struct IDTPointer {
     unsigned short limit;
-    unsigned int base;
+    void *base;
 } __attribute__((packed));
 
 // Creates an Interrupt Descriptor entry

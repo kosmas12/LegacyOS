@@ -32,7 +32,7 @@ struct GDTEntry {
 */
 struct GDTPointer {
     unsigned short limit;
-    unsigned int base;
+    void *base;
 } __attribute__((packed));
 
 // Updates the processor to store the new Global Descriptor Table
