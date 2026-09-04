@@ -10,5 +10,6 @@ void printHelp() {
     printf("floppylist - List all floppy drives and what media they support/have inserted\n");
     printf("readrtc - Read the Real Time Clock's configured time\n");
     printf("writertc - Configure the time in the Real Time Clock\n");
+    printf("pcilist - List PCI devices on your computer\n");
     printf("help - Print this help prompt\n");
 }

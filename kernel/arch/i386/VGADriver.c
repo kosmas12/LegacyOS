@@ -85,7 +85,7 @@ void VGAScroll() {
         }
     }
     for (int i = 0; i < VGA_WIDTH; ++i) {
-        VGAPutCharacterEntryAt(' ', generateVGAColorEntry(VGA_COLOR_RED, VGA_COLOR_WHITE), i, VGA_HEIGHT - 1);
+        VGAPutCharacterEntryAt(' ', currentlyUsedVGAColorEntry, i, VGA_HEIGHT - 1);
     }
 }
 

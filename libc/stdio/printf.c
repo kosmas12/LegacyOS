@@ -7,6 +7,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 // TODO: Set errno to EOVERFLOW in case of errors.
 
@@ -109,6 +110,51 @@ int printf(const char *restrict format, ...) {
                 int currentDigit = integer / powerOf10;
                 integer -= currentDigit * powerOf10;
                 char charToWrite = currentDigit + '0';
+                if (!allowedCharsRemaining) {
+                    return -1;
+                }
+                if (!print(&charToWrite, sizeof(charToWrite))) {
+                    return -1;
+                }
+                written++;
+            }
+        }
+        else if ((*format == 'x') || (*format == 'X')) {
+            format++;
+
+            int integer = (int)va_arg(parameters, int);
+            int tempInteger = integer;
+
+            int numDigits = 0;
+            while (tempInteger != 0) {
+                ++numDigits;
+                tempInteger /= 16;
+            }
+
+            if (integer == 0) {
+                putchar('0');
+                written++;
+            }
+
+            tempInteger = integer;
+            while (numDigits > 0) {
+                uint8_t shiftPlaces = (numDigits-1) * 4;
+                uint8_t currentDigit = (tempInteger >> shiftPlaces) & 0xF;
+                char charToWrite;
+                if (currentDigit < 0xA) {
+                    charToWrite = currentDigit + '0';
+                }
+                else {
+                    char digits[] = { 'A', 'B', 'C', 'D', 'E', 'F' };
+                    if (*format == 'x') {
+                        for (int i = 0; i < 6; ++i) {
+                            digits[i] = digits[i] + 32;
+                        }
+                    }
+                    charToWrite = digits[currentDigit - 0xA];
+                }
+                --numDigits;
+
                 if (!allowedCharsRemaining) {
                     return -1;
                 }

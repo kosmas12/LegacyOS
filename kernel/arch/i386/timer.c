@@ -61,5 +61,6 @@ void timerInstall() {
     IDTSetGate(0x20, timerHandlerAddress, 0x09, 0x8E);
     IDTUpdate();
 
-    timerInit(1000);
+    // This initializes the timer to raise an IRQ every 1ms
+    //timerInit(1000);
 }

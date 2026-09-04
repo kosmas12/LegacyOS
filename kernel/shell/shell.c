@@ -39,7 +39,7 @@ int getNumericalInput(int digits) {
     return input;
 }
 
-void processShellCommand(char command[256], int *index) {
+void processShellCommand(char command[256], int* index) {
     if (strcmp(command, "writertc") == 0) {
         writeRTC();
     }
@@ -54,6 +54,9 @@ void processShellCommand(char command[256], int *index) {
     }
     else if (strcmp(command, "floppylist") == 0) {
         floppyList();
+    }
+    else if (strcmp(command, "pcilist") == 0) {
+        pciList();
     }
     else {
         printf("Command %s not found\n", command);

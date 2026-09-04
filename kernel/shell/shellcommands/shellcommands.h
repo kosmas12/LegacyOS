@@ -10,5 +10,6 @@ void readRTC();
 void clearScreen();
 void printHelp();
 void floppyList();
+void pciList();
 
 #endif //LEGACYOS_SHELLCOMMANDS_H
