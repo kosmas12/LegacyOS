@@ -36,6 +36,7 @@ shell/shellcommands/writertc.o \
 shell/shellcommands/printhelp.o \
 shell/shellcommands/floppylist.o \
 shell/shellcommands/pcilist.o \
+shell/shellcommands/paletteswap.o \
 $(KERNEL_ARCH_OBJS)
 
 OBJS=\

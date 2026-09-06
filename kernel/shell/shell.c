@@ -58,6 +58,9 @@ void processShellCommand(char command[256], int* index) {
     else if (strcmp(command, "pcilist") == 0) {
         pciList();
     }
+    else if (strcmp(command, "paletteswap") == 0) {
+        paletteSwap();
+    }
     else {
         printf("Command %s not found\n", command);
     }

@@ -11,5 +11,6 @@ void clearScreen();
 void printHelp();
 void floppyList();
 void pciList();
+void paletteSwap();
 
 #endif //LEGACYOS_SHELLCOMMANDS_H

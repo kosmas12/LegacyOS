@@ -6,7 +6,6 @@
 #define LEGACYOS_VGADRIVER_H
 
 #include <stdint.h>
-#include <stddef.h>
 
 // RESEARCHME: Are these the actual names?
 #define CURSOR_COMMAND_PORT 0x3D4
@@ -37,10 +36,17 @@ enum VGAColor {
 // Generates a VGA color entry byte from the given background and foreground colors
 uint8_t generateVGAColorEntry(enum VGAColor background, enum VGAColor foreground);
 
+void setVGAColorEntry(enum VGAColor background, enum VGAColor foreground);
+
+uint8_t getVGACurrentHeight();
+uint8_t getVGACurrentWidth();
+
 inline void setCursorPosition(int x, int y);
 
 // Puts a character to the VGA buffer
 void VGAPutCharacter(char character);
+
+void VGAPutCharacterEntryAt(char character, uint8_t color, uint8_t x, uint8_t y);
 
 void VGAClearScreen();
 
@@ -58,6 +64,12 @@ void changeCursorX(int places);
 
 // Change the Y position of the text cursor by `places`
 void changeCursorY(int places);
+
+// Get the character written in position (x, y) on the screen
+char VGAGetCharacterAt(uint8_t x, uint8_t y);
+
+// Get the color of the pixel in position (x, y) on the screen
+enum VGAColor VGAGetColorAt(uint8_t x, uint8_t y);
 
 
 #endif //LEGACYOS_VGADRIVER_H

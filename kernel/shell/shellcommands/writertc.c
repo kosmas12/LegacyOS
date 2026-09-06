@@ -11,6 +11,8 @@ void writeRTC() {
     RTCData dataToWrite;
     dataToWrite.format = RTC_FORMAT_BINARY_24;
 
+    printf("Please always enter exactly 2 digits.\n");
+
     printf("Please enter the year (last 2 digits): ");
     dataToWrite.year = getNumericalInput(2);
 

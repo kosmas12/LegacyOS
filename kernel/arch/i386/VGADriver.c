@@ -18,6 +18,18 @@ uint8_t generateVGAColorEntry(enum VGAColor background, enum VGAColor foreground
     return (background << 4) | foreground;
 }
 
+void setVGAColorEntry(enum VGAColor background, enum VGAColor foreground) {
+    currentlyUsedVGAColorEntry = generateVGAColorEntry(background, foreground);
+}
+
+uint8_t getVGACurrentHeight() {
+    return VGA_HEIGHT;
+}
+
+uint8_t getVGACurrentWidth() {
+    return VGA_WIDTH;
+}
+
 extern unsigned char readPort(unsigned short port);
 extern void writePort(unsigned short port, unsigned char data);
 
@@ -76,6 +88,14 @@ void VGAWriteString(char *string) {
 
 void VGAPutCharacterEntryAt(char character, uint8_t color, uint8_t x, uint8_t y) {
     VGABuffer[y * VGA_WIDTH + x] = character | (color << 8);
+}
+
+char VGAGetCharacterAt(uint8_t x, uint8_t y) {
+    return (char) (VGABuffer[y * VGA_WIDTH + x] & 0xFF);
+}
+
+enum VGAColor VGAGetColorAt(uint8_t x, uint8_t y) {
+    return (enum VGAColor) (VGABuffer[y * VGA_WIDTH + x] & 0xFF00) >> 8;
 }
 
 void VGAScroll() {
